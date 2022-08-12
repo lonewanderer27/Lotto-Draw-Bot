@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import calendar
 from datetime import datetime, timedelta, date
 import requests
-import pandas
 
 # Lotto Games:
 #
@@ -210,6 +209,14 @@ class PCSOLotto:
         Generates dates between start date & end date
         '''
 
+        def gen_daterange(date1, date2):
+            date1 = datetime.strptime(date1, '%Y/%m/%d')
+            date2 = datetime.strptime(date2, '%Y/%m/%d')
+            return [date1 + timedelta(days=x) for x in range((date2-date1).days + 1)]
+            
+        def convert_daterange(date):
+            return str(date.strftime("%Y/%m/%d"))
+
         def filter_date_by_day(datesb):
             '''Removes dates that are not in chosen weekdays'''
 
@@ -218,22 +225,27 @@ class PCSOLotto:
                                 ).strftime('%a') in self.__days:
                 return True
 
-        sdate = date(
-            self.__start_year,
-            self.__start_month,
-            self.__start_day
-            )
-        edate = date(
-            self.__end_year,
-            self.__end_month,
-            self.__end_day
-        )
+        # sdate = date(
+        #     self.__start_year,
+        #     self.__start_month,
+        #     self.__start_day
+        #     )
+        # edate = date(
+        #     self.__end_year,
+        #     self.__end_month,
+        #     self.__end_day
+        # )
 
         # Generate dates between the start & end date
-        self.__dates_between = pandas.date_range(
-            sdate, edate,
-            freq='d'
-        ).strftime("%Y/%m/%d").tolist()
+        # self.__dates_between = pandas.date_range(
+        #     sdate, edate,
+        #     freq='d'
+        # ).strftime("%Y/%m/%d").tolist()
+
+        sdate = f"{self.__start_year}/{self.__start_month}/{self.__start_day}"
+        edate = f"{self.__end_year}/{self.__end_month}/{self.__end_day}"
+
+        self.__dates_between = list(map(convert_daterange, gen_daterange(sdate, edate)))
 
         # If user has provided specific weekdays
         # Then append matching dates
