@@ -193,10 +193,10 @@ class PCSOLotto:
                 # insert the result
                 self.__result_rows[cells[2]][cells[0]] = result
 
-                combinations_str = f'[ {", ".join(str(n) for n in cells[1])} ]'
+                combinations_str = f'{"-".join(str(n) for n in cells[1])}'
 
                 self.result_list_str.append(
-                    f"Game: {cells[0]}\nCombinations: {combinations_str}\nDraw Date: {cells[2]}\nJackpot: {cells[3]}\nWinners: {cells[4]}"
+                    f"{cells[0]}\nResult: {combinations_str}\nDraw Date: {cells[2]}\nJackpot: {cells[3]}\nWinners: {cells[4]}"
                 )
 
         return self.__result_rows
