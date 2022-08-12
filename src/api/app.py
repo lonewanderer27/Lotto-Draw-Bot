@@ -1,3 +1,4 @@
+from typing import Union
 from fastapi import FastAPI, Query
 import uvicorn
 from PCSOLotto import PCSOLotto
@@ -95,10 +96,10 @@ async def custom(
                             example="2022/08/01"),
     end_date: str = Query(description=params_desc['end_date'],
                           example="2022/08/12"),
-    days: list[str] | None = Query(default=None,
+    days: Union[list[str], None] = Query(default=None,
                                    description=params_desc['days'],
                                    example="Sun, Mon, Tue ..."),
-    games: list[str] | None = Query(default=None,
+    games: Union[list[str], None] = Query(default=None,
                                     description=params_desc['games'],
                                     example="EZ2, 6/42, 6Digit etc..."),
     peso_sign: bool = Query(default=True,
@@ -153,12 +154,12 @@ async def custom(
 
 @app.get("/api/latest")
 async def latest(
-    games: list[str] | None = Query(default=None,
+    games: Union[list[str], None] = Query(default=None,
                                     description=params_desc['games'],
                                     example="EZ2, 6/42, 6Digit etc..."),
     peso_sign: bool = Query(default=True,
                             description=params_desc['peso_sign']),
-    chatfuel: bool = Query(include_in_schema=False)
+    chatfuel: bool = False
 ):
     lotto = PCSOLotto()
     lotto_result_list_str = ""
@@ -212,12 +213,12 @@ async def latest(
 
 @app.get("/api/today")
 async def today(
-    games: list[str] | None = Query(default=None,
+    games: Union[list[str], None] = Query(default=None,
                                     description=params_desc['games'],
                                     example="EZ2, 6/42, 6Digit etc..."),
     peso_sign: bool = Query(default=True,
                             description=params_desc['peso_sign']),
-    chatfuel: bool = Query(include_in_schema=False)
+    chatfuel: bool = False
 ):
     lotto = PCSOLotto()
     lotto_result_list_str = ""
@@ -268,12 +269,12 @@ async def today(
 
 @app.get("/api/yesterday")
 async def yesterday(
-    games: list[str] | None = Query(default=None,
+    games: Union[list[str], None] = Query(default=None,
                                     description=params_desc['games'],
                                     example="EZ2, 6/42, 6Digit etc..."),
     peso_sign: bool = Query(default=True,
                             description=params_desc['peso_sign']),
-    chatfuel: bool = Query(include_in_schema=False)
+    chatfuel: bool = False
 ):
     lotto = PCSOLotto()
     lotto_result_list_str = ""
