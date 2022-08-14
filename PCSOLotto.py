@@ -1,23 +1,7 @@
 from bs4 import BeautifulSoup
 import calendar
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 import requests
-
-# Lotto Games:
-#
-# Ultra Lotto 6/58
-# Grand Lotto 6/55
-# Superlotto 6/49
-# Megalotto 6/45
-# Lotto 6/42
-# 6Digit
-# 4Digit
-# Suertres Lotto 11AM
-# Suertres Lotto 4PM
-# Suertres Lotto 9PM
-# EZ2 Lotto 11AM
-# EZ2 Lotto 4PM
-# EZ2 Lotto 9PM
 
 
 class PCSOLotto:
@@ -50,16 +34,16 @@ class PCSOLotto:
         '''Retrieves the BeautifulSoup4 object that contains the page html'''
 
         r = requests.get(self.__link)
-        self.__bsoup4 = BeautifulSoup(r.text, 'html.parser')
-        return self.__bsoup4
+        self.__soup = BeautifulSoup(r.text, 'html.parser')
+        return self.__soup
 
     def __get_asp_hidden_vals(self) -> dict:
         '''Retrieves ASP Hidden Values used for authentication / cookie'''
 
-        self.__viewstate = self.__bsoup4.find(id='__VIEWSTATE')['value']
-        self.__viewstategenerator = self.__bsoup4.find(
+        self.__viewstate = self.__soup.find(id='__VIEWSTATE')['value']
+        self.__viewstategenerator = self.__soup.find(
             id='__VIEWSTATEGENERATOR')['value']
-        self.__eventvalidation = self.__bsoup4.find(
+        self.__eventvalidation = self.__soup.find(
             id='__EVENTVALIDATION')['value']
         return {
             'VIEWSTATE': self.__viewstate,
@@ -100,8 +84,8 @@ class PCSOLotto:
         '''
 
         r = requests.post(self.__link, data)
-        self.__bsoup4 = BeautifulSoup(r.text, 'html.parser')
-        return self.__bsoup4
+        self.__soup = BeautifulSoup(r.text, 'html.parser')
+        return self.__soup
 
     def __get_result_rows_raw(self) -> list:
         '''
@@ -109,7 +93,7 @@ class PCSOLotto:
         '''
 
         # find all the rows, skip the first row as that's the table header
-        rows = self.__bsoup4.find_all('tr')[1:]
+        rows = self.__soup.find_all('tr')[1:]
         self.__result_rows_raw = []
         for row in rows:
             cells = row.findChildren('td')
@@ -213,7 +197,7 @@ class PCSOLotto:
             date1 = datetime.strptime(date1, '%Y/%m/%d')
             date2 = datetime.strptime(date2, '%Y/%m/%d')
             return [date1 + timedelta(days=x) for x in range((date2-date1).days + 1)]
-            
+    
         def convert_daterange(date):
             return str(date.strftime("%Y/%m/%d"))
 
@@ -268,11 +252,11 @@ class PCSOLotto:
     ) -> dict:
         '''
         Args:
-        - start_date    (str)  : date to start searching            | YYYY/MM/DD        | Required
-        - end_date      (str)  : date to end searching              | YYYY/MM/DD        | Required
-        - days          (int)  : days to select                     | Sun, Mon, Tue ... | Default = All Days, Optional
-        - games         (list) : lotto games to search              | EZ2, 6/42, 6/55   | Default = All Games, Optional
-        - peso_sign     (bool) : prefix a peso sign in the jackpot  | True or False     | Default = True, Optional
+        - start_date    (str)       : date to start searching                       | YYYY/MM/DD        | Required
+        - end_date      (str)       : date to end searching                         | YYYY/MM/DD        | Required
+        - days          list(str)   : days to select                                | Sun, Mon, Tue ... | Default = All Days, Optional
+        - games         list(str)   : lotto games to search                         | EZ2, 6/42, 6/55   | Default = All Games, Optional
+        - peso_sign     (bool)      : to prefix a peso sign in the jackpot, or not  | True or False     | Default = True, Optional
 
         Examples:
         >>> # Search for results from Aug 1 2022 to Aug 10 2022
@@ -285,7 +269,7 @@ class PCSOLotto:
         >>> # from Aug 1 2022 to Aug 10 2022
         >>> lotto.results('2022/08/01', '2022/08/10', ['6/58', '6/55', '6/42'])
         >>>
-        >>> # Search for results every Mon, Tue and Wed
+        >>> # Search for results every Mon, Wed and Fri
         >>> # from Aug 1 2022 to Aug 10 2022
         >>> lotto.results('2022/08/01', '2022/08/10', ['Mon', 'Wed', 'Fri'])
         '''
