@@ -92,18 +92,14 @@ async def index():
 
 @app.get("/api/custom")
 async def custom(
-    start_date: str = Query(description=params_desc['start_date'],
-                            example="2022/08/01"),
-    end_date: str = Query(description=params_desc['end_date'],
-                          example="2022/08/12"),
+    start_date: str = Query(description=params_desc['start_date']),
+    end_date: str = Query(description=params_desc['end_date']),
     days: Union[list[str], None] = Query(default=None,
-                                   description=params_desc['days'],
-                                   example="Sun, Mon, Tue ..."),
+                                   description=params_desc['days']),
     games: Union[list[str], None] = Query(default=None,
-                                    description=params_desc['games'],
-                                    example="EZ2, 6/42, 6Digit etc..."),
+                                    description=params_desc['games']),
     peso_sign: bool = Query(default=True,
-                            description=params_desc['peso_sign']),
+                            description=params_desc['peso_sign'])
 ):
     lotto = PCSOLotto()
     try:
@@ -155,8 +151,7 @@ async def custom(
 @app.get("/api/latest")
 async def latest(
     games: Union[list[str], None] = Query(default=None,
-                                    description=params_desc['games'],
-                                    example="EZ2, 6/42, 6Digit etc..."),
+                                    description=params_desc['games']),
     peso_sign: bool = Query(default=True,
                             description=params_desc['peso_sign']),
     chatfuel: bool = False
@@ -214,10 +209,8 @@ async def latest(
 @app.get("/api/today")
 async def today(
     games: Union[list[str], None] = Query(default=None,
-                                    description=params_desc['games'],
-                                    example="EZ2, 6/42, 6Digit etc..."),
-    peso_sign: bool = Query(default=True,
-                            description=params_desc['peso_sign']),
+                                    description=params_desc['games']),
+    peso_sign: bool = Query(default=True, description=params_desc['peso_sign']),
     chatfuel: bool = False
 ):
     lotto = PCSOLotto()
@@ -270,8 +263,7 @@ async def today(
 @app.get("/api/yesterday")
 async def yesterday(
     games: Union[list[str], None] = Query(default=None,
-                                    description=params_desc['games'],
-                                    example="EZ2, 6/42, 6Digit etc..."),
+                                    description=params_desc['games']),
     peso_sign: bool = Query(default=True,
                             description=params_desc['peso_sign']),
     chatfuel: bool = False
