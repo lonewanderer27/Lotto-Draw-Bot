@@ -157,7 +157,7 @@ async def latest(
     chatfuel: bool = False
 ):
     lotto = PCSOLotto()
-    lotto_result_list_str = ""
+    lotto_results_str_list = ""
 
     if chatfuel:
         json = {'messages': []}
@@ -168,10 +168,10 @@ async def latest(
         )
 
         if len(results) > 0:
-            lotto_result_list_str = "\n\n".join(lotto.result_list_str)
-            print(lotto_result_list_str)
+            lotto_results_str_list = "\n\n".join(lotto.results_str_list)
+            print(lotto_results_str_list)
 
-            response = split_message(json, lotto_result_list_str, 650)
+            response = split_message(json, lotto_results_str_list, 650)
 
         else:
 
@@ -214,7 +214,7 @@ async def today(
     chatfuel: bool = False
 ):
     lotto = PCSOLotto()
-    lotto_result_list_str = ""
+    lotto_results_str_list = ""
     if chatfuel:
 
         json = {'messages': []}
@@ -225,8 +225,8 @@ async def today(
         )
 
         if len(results) > 0:
-            lotto_result_list_str = "\n\n".join(lotto.result_list_str)
-            response = split_message(json, lotto_result_list_str, 500)
+            lotto_results_str_list = "\n\n".join(lotto.results_str_list)
+            response = split_message(json, lotto_results_str_list, 500)
 
         else:
             response = {
@@ -269,7 +269,7 @@ async def yesterday(
     chatfuel: bool = False
 ):
     lotto = PCSOLotto()
-    lotto_result_list_str = ""
+    lotto_results_str_list = ""
     if chatfuel:
 
         json = {'messages': []}
@@ -280,10 +280,10 @@ async def yesterday(
         )
 
         if len(results) > 0:
-            lotto_result_list_str = "\n\n".join(lotto.result_list_str)
-            print(lotto_result_list_str)
+            lotto_results_str_list = "\n\n".join(lotto.results_str_list)
+            print(lotto_results_str_list)
 
-            response = split_message(json, lotto_result_list_str, 500)
+            response = split_message(json, lotto_results_str_list, 500)
         else:
             response = {
                 'success': False,
